@@ -14,8 +14,11 @@ if [[ $copyDockerEnv == "y" || $copyDockerEnv == "Y" ]]; then
     scp .env $SERVER_USERNAME@$SERVER_IP:$PROJECT_DIRECTORY
 fi
 
+scp fix_permissions_for_production.sh $SERVER_USERNAME@$SERVER_IP:$PROJECT_DIRECTORY
+
 ssh $SERVER_USERNAME@$SERVER_IP << EOF
     cd ${PROJECT_DIRECTORY}
     docker-compose -f docker-compose.prod.yml pull
     docker-compose -f docker-compose.prod.yml up -d
+    bash fix_permissions_for_production.sh
 EOF
