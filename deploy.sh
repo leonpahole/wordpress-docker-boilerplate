@@ -46,6 +46,7 @@ echo "### RUNNING DEPLOYMENT ###"
 ssh $SERVER_USERNAME@$SERVER_IP << EOF
     cd ${PROJECT_DIRECTORY}
     docker-compose -f docker-compose.prod.yml pull
+    docker-compose -f docker-compose.prod.yml down
     docker-compose -f docker-compose.prod.yml up -d
     bash fix_permissions_for_production.sh
 EOF
