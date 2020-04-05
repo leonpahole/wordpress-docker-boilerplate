@@ -2,19 +2,25 @@ version: "3.7"
 
 services:
   wordpress:
-    container_name: mysite_wordpress
+    container_name: mysite_site_prod
     image: leonpahole/wordpress-boilerplate
     restart: always
+    ports:
+      # this is only for demo purposes!
+      # In reality, this should not be exposed,
+      # there should be a proxy in front of this container,
+      # which would also hold certificates.
+      - 8080:80
     environment:
       WORDPRESS_DB_HOST: mysite_mysql
       WORDPRESS_DB_USER: ${DB_USER}
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
       WORDPRESS_DB_NAME: ${DB_NAME}
     volumes:
-      - uploads:/var/www/html/wp-content/uploads
+      - uploads_prod:/var/www/html/wp-content/uploads
 
   db:
-    container_name: mysite_mysql
+    container_name: mysite_db_prod
     image: mysql:5.7
     restart: always
     environment:
@@ -23,13 +29,8 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_RANDOM_ROOT_PASSWORD: "1"
     volumes:
-      - db:/var/lib/mysql
+      - db_prod:/var/lib/mysql
 
 volumes:
-  uploads:
-  db:
-
-networks:
-  default:
-    external:
-      name: leonpahole_com_prod_nginx
+  uploads_prod:
+  db_prod:
